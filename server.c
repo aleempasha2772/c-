@@ -58,6 +58,15 @@ SOL_SOCKET means the option is at the general socket layer itself, not specific 
         close(server_fd);
         exit(EXIT_FAILURE);
     }
+    // 3. Listen for incoming connections
+    if (listen(server_fd, 10) < 0) { // Backlog of 10 pending connections
+        perror("Listen failed");
+        close(server_fd);
+        exit(EXIT_FAILURE);
+    }
+    printf("Server listening on port %d, serving files from %s\n", PORT, DOCUMENT_ROOT);
+
+
 
     return 0;
 }
