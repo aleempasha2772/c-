@@ -47,5 +47,17 @@ SOL_SOCKET means the option is at the general socket layer itself, not specific 
        perror("setsockopt(SO_REUSEADDR) failed");
        // Non-fatal, but good practice
     }
+
+    // 2. Bind socket to address and port
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = INADDR_ANY; //Listen on all available interfaces
+    server_addr.sin_port = htons(PORT);
+
+    if(bind(server_fd,(struct sockaddr *)&server_addr, sizeof(server_addr))<0){
+        perror("Bind Failed");
+        close(server_fd);
+        exit(EXIT_FAILURE);
+    }
+
     return 0;
 }
