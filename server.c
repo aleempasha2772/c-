@@ -34,10 +34,18 @@ SOL_SOCKET means the option is at the general socket layer itself, not specific 
 
 */
 
+    // 1. Create socket
     server_fd = socket(AF_INET,SOCK_STREAM,0);
     if (server_fd < 0) {
         perror("Socket creation failed");
         exit(EXIT_FAILURE);
+    }
+
+    // Optional: Set socket options (allow reuse of address)
+    int opt = 1;
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
+       perror("setsockopt(SO_REUSEADDR) failed");
+       // Non-fatal, but good practice
     }
     return 0;
 }
