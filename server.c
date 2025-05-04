@@ -66,7 +66,35 @@ SOL_SOCKET means the option is at the general socket layer itself, not specific 
     }
     printf("Server listening on port %d, serving files from %s\n", PORT, DOCUMENT_ROOT);
 
+    // --- Create the document root directory if it doesn't exist ---
+    struct stat st = {0};
+    if(stat(DOCUMENT_ROOT, &st)== -1){
+        if(mkdir(DOCUMENT_ROOT,0777) == -1){
+            perror("Failed to create root directory");
+            fprintf(stderr,"Warning: Could not create %s directory.\n", DOCUMENT_ROOT);
+        }else{
+            printf("Created Directory: %s\n", DOCUMENT_ROOT);
+            FILE *index_file = fopen(DOCUMENT_ROOT "/index.html", "w");
+            if(index_file){
+                fprintf(index_file, "<html><body><h1>Hello from C Server!</h1></body></html>");
+                 fclose(index_file);
+                 printf("Created default index.html in %s\n", DOCUMENT_ROOT);
+            }
+        }
+    }
 
+    // --- End directory creation ---
+
+
+    // 4. Accept connections in a loop
+
+    while(1){
+        client_socket = accept(server_fd, (struct sockaddr *)& client_addr, & client_addr_len){
+            if(client_socket<0){
+                perror("Accept failed");
+            }
+        }
+    }
 
     return 0;
 }
